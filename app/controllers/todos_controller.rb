@@ -8,7 +8,7 @@ class TodosController < ApplicationController
 
   def create
     @todo = Todo.create!(todo_params)
-    json_repsonse(@todo, :created)
+    json_response(@todo, :created)
   end
 
   def show

@@ -1,12 +1,16 @@
 require 'rails_helper'
 
 RSpec.describe 'Todos API', type: :request do
+
   let!(:todos) { create_list(:todo, 10) }
   let(:todo_id) { todos.first.id }
+
   describe 'GET /todos' do
+
     before { get '/todos'}
+
     it 'returns todos' do
-      expect(json).not_to_be_empty
+      expect(json).not_to be_empty
       expect(json.size).to eq(10)
     end
 
@@ -16,10 +20,10 @@ RSpec.describe 'Todos API', type: :request do
   end
 
   describe 'GET /todos/:id' do
-    before { get "todos/#{todo_id}" }
+    before { get "/todos/#{todo_id}" }
     context 'when the record exits' do
       it 'returns the todo' do
-        expect(json).not_to_be_empty
+        expect(json).not_to be_empty
         expect(json['id']).to eq(todo_id)
       end
 
@@ -54,7 +58,7 @@ RSpec.describe 'Todos API', type: :request do
   context 'when the request is invalid' do
     before { post '/todos', params: { title: 'Foobar' } }
     it 'returns status code 422' do
-      expec(response).to have_http_status(422)
+      expect(response).to have_http_status(422)
     end
 
     it 'returns a validation failure message' do
