@@ -7,7 +7,7 @@ RSpec.describe 'Items API' do
   let(:id) { items.first.id }
 
   describe 'GET /todos/:todo_id/items' do
-    before { get "/todos#{todo_id}/items" }
+    before { get "/todos/#{todo_id}/items" }
 
     context 'when todo exists' do
       it 'returns status code 200' do
@@ -59,9 +59,10 @@ RSpec.describe 'Items API' do
   end
 
   describe 'POST /todos/:todo_id/items' do
+    let(:valid_attributes) { { name: 'Visit Narnia', done: false } }
 
     context 'when request attributes are valid' do
-      before { post "/todos/#{todo_id}/items", params: {} }
+      before { post "/todos/#{todo_id}/items", params: valid_attributes }
 
       it 'returns status code 201' do
         expect(response).to have_http_status(201)
@@ -81,5 +82,41 @@ RSpec.describe 'Items API' do
     end
   end
 
-  #Begin tests for PUT requests below
+  describe 'PUT /todos/:todo_id/items/:id' do
+    let(:valid_attributes) { { name: 'Mozart' } }
+
+    before { put "/todos/#{todo_id}/items/#{id}", params: valid_attributes }
+
+    context 'when item exists' do
+
+      it 'returns status code 204' do
+        expect(response).to have_http_status(204)
+      end
+
+      it 'updates the item' do
+        updated_item = Item.find(id)
+        expect(updated_item.name).to match(/Mozart/)
+      end
+    end
+
+    context 'when the item does not exist' do
+      let(:id) { 0 }
+
+      it 'returns status code 404' do
+        expect(response).to have_http_status(404)
+      end
+
+      it 'returns a not found message' do
+        expect(response.body).to match(/Couldn't find Item/)
+      end
+    end
+  end
+
+  describe 'DELETE /todos/:id' do
+    before { delete "/todos/#{todo_id}/items/#{id}" }
+
+    it 'returns status code 204' do
+      expect(response).to have_http_status(204)
+    end
+  end
 end
