@@ -9,6 +9,8 @@ end
 gem 'rails', '~> 5.0.2'
 gem 'sqlite3'
 gem 'puma', '~> 3.0'
+gem 'bcrypt', '~> 3.1.7'
+gem 'jwt'
 
 
 
